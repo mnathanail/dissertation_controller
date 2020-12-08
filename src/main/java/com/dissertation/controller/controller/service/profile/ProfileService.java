@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -204,24 +201,25 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public List<Skill> getCandidateSkillList(int candidateId) {
+    public HashSet<SkillResponse> getCandidateSkillList(int candidateId) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
 
-        ResponseEntity<List<Skill>> skillResponseEntity =
+        ResponseEntity<HashSet<SkillResponse>> skillResponseEntity =
                 this.restTemplate.exchange(
                         Endpoint.SKILL_CANDIDATE_LIST_GET,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<List<Skill>>() {},
+                        new ParameterizedTypeReference<HashSet<SkillResponse>>() {},
                         urlParams);
 
         return skillResponseEntity.getBody();
     }
 
     @Override
-    public List<Skill> saveNewSkillList(List<Skill> skill) {
+    public List<Skill> saveNewSkillList(int candidateId, List<Skill> skill) {
         Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("id", String.valueOf(candidateId));
 
         ResponseEntity<List<Skill>> skillResponseEntity =
                 this.restTemplate.exchange(
@@ -236,19 +234,19 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public List<Skill> saveNewCandidateSkillList(int candidateId, List<Skill> skills) {
+    public HashSet<SkillResponse> saveNewCandidateSkillList(int candidateId, List<Skill> skills) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
 
-        ResponseEntity<List<Skill>> skillResponseEntity =
+        ResponseEntity<List<SkillResponse>> skillResponseEntity =
                 this.restTemplate.exchange(
                         Endpoint.SKILL_CANDIDATE_LIST_SAVE,
                         HttpMethod.POST,
                         new HttpEntity<>(skills),
-                        new ParameterizedTypeReference<List<Skill>>() {},
+                        new ParameterizedTypeReference<List<SkillResponse>>() {},
                         urlParams);
 
-        return skillResponseEntity.getBody();
+        return new HashSet<SkillResponse>(skillResponseEntity.getBody());
 
         //return this.restTemplate.postForObject(Endpoint.SKILL_SAVE, skills, List.class, urlParams);
     }

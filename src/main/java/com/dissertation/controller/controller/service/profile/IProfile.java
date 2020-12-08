@@ -2,6 +2,7 @@ package com.dissertation.controller.controller.service.profile;
 
 import com.dissertation.controller.controller.model.profile.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 public interface IProfile {
@@ -39,11 +40,11 @@ public interface IProfile {
 
     List<Skill> getSkillByKeywordList(int candidateId, String skill);
 
-    List<Skill> getCandidateSkillList(int candidateId);
+    HashSet<SkillResponse> getCandidateSkillList(int candidateId);
 
-    List<Skill> saveNewSkillList(List<Skill> skill);
+    List<Skill> saveNewSkillList(int candidateId, List<Skill> skill);
 
-    List<Skill> saveNewCandidateSkillList(int candidateId, List<Skill> skills);
+    HashSet<SkillResponse> saveNewCandidateSkillList(int candidateId, List<Skill> skills);
 
 
 }

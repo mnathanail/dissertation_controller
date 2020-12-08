@@ -1,17 +1,13 @@
 package com.dissertation.controller.controller.model.profile;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder()
-public class Skill {
-    private int id;
+public class SkillNode {
     private int entityId;
     private String name;
-    private Long yearsOfExperience;
 }

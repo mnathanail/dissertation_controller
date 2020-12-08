@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -125,23 +126,23 @@ public class ProfileCandidateController {
     }
 
     @GetMapping("/profile/{id}/get/candidate-skill-list")
-    public ResponseEntity<List<Skill>> getCandidateSkillsList(@PathVariable("id") int candidateId){
+    public ResponseEntity<HashSet<SkillResponse>> getCandidateSkillsList(@PathVariable("id") int candidateId){
 
-        List<Skill> skills = this.profileService.getCandidateSkillList(candidateId);
+        HashSet<SkillResponse> skills = this.profileService.getCandidateSkillList(candidateId);
         return ResponseEntity.ok(skills);
     }
 
-    @PostMapping("/profile/{id}/save/skill")
+    @PostMapping("/profile/{id}/save/skill-list")
     public ResponseEntity<List<Skill>> saveNewSkill(@PathVariable("id") int candidateId,
                                                 @RequestBody List<Skill> skills){
-        List<Skill> newSkill = this.profileService.saveNewSkillList(skills);
+        List<Skill> newSkill = this.profileService.saveNewSkillList(candidateId,skills);
         return ResponseEntity.ok(newSkill);
     }
 
     @PostMapping("/profile/{id}/save/candidate-skill-list")
-    public ResponseEntity<List<Skill>> saveNewSkillListToCandidate(@PathVariable("id") int candidateId,
+    public ResponseEntity<HashSet<SkillResponse>> saveNewSkillListToCandidate(@PathVariable("id") int candidateId,
                                                         @RequestBody List<Skill> skills){
-        List<Skill> newSkill = this.profileService.saveNewCandidateSkillList(candidateId, skills);
+        HashSet<SkillResponse> newSkill = this.profileService.saveNewCandidateSkillList(candidateId, skills);
         return ResponseEntity.ok(newSkill);
     }
 
