@@ -1,7 +1,7 @@
 package com.dissertation.controller.controller.controller.profile;
 
 import com.dissertation.controller.controller.model.profile.*;
-import com.dissertation.controller.controller.service.profile.IProfile;
+import com.dissertation.controller.controller.service.profile.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -107,6 +107,14 @@ public class ProfileCandidateController {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("/profile/{id}/patch/education/{educationId}")
+    public ResponseEntity<Education> patchExperience(@PathVariable("id") int candidateId,
+                                                      @PathVariable("educationId") String educationId,
+                                                      @RequestBody Education education){
+        Education exp = this.profileService.patchEducation(candidateId,educationId, education);
+        return ResponseEntity.ok(exp);
+    }
+
     @DeleteMapping("/profile/{id}/delete/education/{educationId}")
     public ResponseEntity<Boolean> deleteEducation(@PathVariable("id") int candidateId,
                                                     @PathVariable("educationId") int educationId){
@@ -144,6 +152,20 @@ public class ProfileCandidateController {
                                                         @RequestBody List<Skill> skills){
         HashSet<SkillResponse> newSkill = this.profileService.saveNewCandidateSkillList(candidateId, skills);
         return ResponseEntity.ok(newSkill);
+    }
+
+    @PatchMapping("/profile/{id}/patch/skill-list")
+    public ResponseEntity<List<SkillResponse>> patchSkillListToCandidate(@PathVariable("id") int candidateId,
+                                                                            @RequestBody List<SkillResponse> skills){
+        List<SkillResponse> newSkill = this.profileService.patchCandidateSkillList(candidateId, skills);
+        return ResponseEntity.ok(newSkill);
+    }
+
+    @DeleteMapping("/profile/{id}/delete/candidate-skill/{skillUuid}")
+    public ResponseEntity<Boolean> deleteSkillCandidate(@PathVariable("id") int candidateId,
+                                                        @PathVariable("skillUuid") String skillUuid){
+        Boolean isDeleted = this.profileService.deleteCandidateSkill(candidateId, skillUuid);
+        return ResponseEntity.ok(isDeleted);
     }
 
    /*

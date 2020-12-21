@@ -114,7 +114,6 @@ public class ProfileService implements IProfile {
 
     @Override
     public Boolean deleteExperience(int candidateId, String experienceId) {
-        //candidateId =1;
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("experienceId", experienceId);
@@ -133,7 +132,6 @@ public class ProfileService implements IProfile {
     // Education
     @Override
     public Education saveEducation(int id, Education education) {
-        //id=1;
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(id));
         return this.restTemplate.postForObject(Endpoint.EDUCATION_SAVE,education, Education.class, urlParams);
@@ -141,7 +139,6 @@ public class ProfileService implements IProfile {
 
     @Override
     public Education getEducation(int candidateId, int educationId ) {
-        //candidateId =1;
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("educationId", String.valueOf(educationId));
@@ -150,7 +147,6 @@ public class ProfileService implements IProfile {
 
     @Override
     public List<Education> getEducationList(int candidateId) {
-        //candidateId =1;
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         ResponseEntity<List<Education>> educationEntity =
@@ -164,11 +160,35 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public void deleteEducation(int candidateId, int educationId) {
+    public Education patchEducation(int candidateId, String educationId,  Education education) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("id", String.valueOf(candidateId));
+        urlParams.put("educationId", educationId);
+
+        try {
+            return this.restTemplate.patchForObject(Endpoint.EDUCATION_PATCH, education, Education.class , urlParams);
+        }
+        catch (final HttpClientErrorException e) {
+            System.out.println(e);
+            System.out.println(e.getStatusCode());
+            System.out.println(e.getResponseBodyAsString());
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean deleteEducation(int candidateId, int educationId) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("educationId", String.valueOf(educationId));
-        this.restTemplate.delete(Endpoint.EDUCATION_DELETE, urlParams);
+        ResponseEntity<Boolean> exchange = this.restTemplate.exchange(
+                Endpoint.EDUCATION_DELETE,
+                HttpMethod.DELETE,
+                new HttpEntity<String>(""),
+                Boolean.class,
+                urlParams);
+        return exchange.getBody();
+
     }
 
     // End Experience
@@ -250,5 +270,40 @@ public class ProfileService implements IProfile {
 
         //return this.restTemplate.postForObject(Endpoint.SKILL_SAVE, skills, List.class, urlParams);
     }
+
+    @Override
+    public List<SkillResponse> patchCandidateSkillList(int candidateId, List<SkillResponse> skills) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("id", String.valueOf(candidateId));
+
+        ResponseEntity<List<SkillResponse>> skillResponseEntity =
+            this.restTemplate.exchange(
+                Endpoint.SKILL_CANDIDATE_LIST_PATCH,
+                HttpMethod.PATCH,
+                new HttpEntity<>(skills),
+                new ParameterizedTypeReference<List<SkillResponse>>() {},
+                urlParams
+            );
+
+        return skillResponseEntity.getBody();
+    }
+
+    @Override
+    public Boolean deleteCandidateSkill(int candidateId, String skillUuid) {
+        //candidateId =1;
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("id", String.valueOf(candidateId));
+        urlParams.put("skillUuid", skillUuid);
+
+        ResponseEntity<Boolean> exchange = this.restTemplate.exchange(
+                Endpoint.SKILL_CANDIDATE_DELETE,
+                HttpMethod.DELETE,
+                new HttpEntity<String>(""),
+                Boolean.class,
+                urlParams);
+        return exchange.getBody();
+        //this.restTemplate.delete(Endpoint.EXPERIENCE_DELETE, urlParams);
+    }
+
 
 }

@@ -1,6 +1,5 @@
 package com.dissertation.controller.controller.model.profile;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -9,9 +8,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder()
 public class SkillResponse {
-    @JsonProperty("skillNode")
+
     private SkillNode skillNode;
     /*@JsonProperty("yearsOfExperience")*/
-    private Long yoe;
+    private Long yearsOfExperience;
     private String relUuid;
 }

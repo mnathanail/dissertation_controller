@@ -34,7 +34,9 @@ public interface IProfile {
 
     List<Education> getEducationList(int candidateId);
 
-    void deleteEducation(int candidateId, int educationId);
+    Education patchEducation(int id, String educationId,  Education education);
+
+    Boolean deleteEducation(int candidateId, int educationId);
 
 
 
@@ -46,5 +48,8 @@ public interface IProfile {
 
     HashSet<SkillResponse> saveNewCandidateSkillList(int candidateId, List<Skill> skills);
 
+    List<SkillResponse> patchCandidateSkillList(int candidateId, List<SkillResponse> skills);
+
+    Boolean deleteCandidateSkill(int candidateId, String skillUuid);
 
 }
