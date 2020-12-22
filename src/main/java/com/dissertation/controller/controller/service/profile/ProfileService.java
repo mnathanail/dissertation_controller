@@ -138,23 +138,23 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public Education getEducation(int candidateId, int educationId ) {
+    public Education getEducation(int candidateId, String educationId ) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
-        urlParams.put("educationId", String.valueOf(educationId));
+        urlParams.put("educationId", educationId);
         return this.restTemplate.getForObject(Endpoint.EDUCATION_GET,Education.class,  urlParams);
     }
 
     @Override
-    public List<Education> getEducationList(int candidateId) {
+    public Set<Education> getEducationList(int candidateId) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
-        ResponseEntity<List<Education>> educationEntity =
+        ResponseEntity<Set<Education>> educationEntity =
                 this.restTemplate.exchange(
                         Endpoint.EDUCATION_LIST_GET,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<List<Education>>() {},
+                        new ParameterizedTypeReference<Set<Education>>() {},
                         urlParams);
         return  educationEntity.getBody();
     }

@@ -4,6 +4,7 @@ import com.dissertation.controller.controller.model.profile.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public interface IProfile {
 
@@ -30,9 +31,9 @@ public interface IProfile {
 
     Education saveEducation(int id, Education education);
 
-    Education getEducation(int candidateId, int educationId);
+    Education getEducation(int candidateId, String educationId);
 
-    List<Education> getEducationList(int candidateId);
+    Set<Education> getEducationList(int candidateId);
 
     Education patchEducation(int id, String educationId,  Education education);
 

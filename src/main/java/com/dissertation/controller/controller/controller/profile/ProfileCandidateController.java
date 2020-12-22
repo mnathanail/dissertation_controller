@@ -1,7 +1,7 @@
 package com.dissertation.controller.controller.controller.profile;
 
 import com.dissertation.controller.controller.model.profile.*;
-import com.dissertation.controller.controller.service.profile.*;
+import com.dissertation.controller.controller.service.profile.IProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -95,14 +96,14 @@ public class ProfileCandidateController {
     }
 
     @GetMapping("/profile/{id}/get/education-list")
-    public ResponseEntity<List<Education>> getEducationList(@PathVariable("id") int id){
-        List<Education> response = this.profileService.getEducationList(id);
+    public ResponseEntity<Set<Education>> getEducationList(@PathVariable("id") int id){
+        Set<Education> response = this.profileService.getEducationList(id);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/profile/{id}/get/education/{educationId}")
     public ResponseEntity<Education> getEducation(
-            @PathVariable("educationId") int educationId, @PathVariable("id") int id){
+            @PathVariable("educationId") String educationId, @PathVariable("id") int id){
         Education response = this.profileService.getEducation(id, educationId);
         return ResponseEntity.ok(response);
     }

@@ -30,7 +30,7 @@ public class Education {
     @JsonProperty("degree")
     public String degree;
     @JsonProperty("school")
-    public boolean school;
+    public String school;
     @JsonProperty("period")
     public Period period;
 }
