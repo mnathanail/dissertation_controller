@@ -22,6 +22,13 @@ public class ProfileService implements IProfile {
     //Candidate
 
     @Override
+    public Candidate findByEmail(String email) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("email", email);
+        return this.restTemplate.getForObject(Endpoint.FIND_BY_EMAIL, Candidate.class, urlParams);
+    }
+
+    @Override
     public Candidate savePhotoProfile(int candidateId, byte[] profilePic) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));

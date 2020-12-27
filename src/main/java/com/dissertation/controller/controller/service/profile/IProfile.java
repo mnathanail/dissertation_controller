@@ -8,6 +8,8 @@ import java.util.Set;
 
 public interface IProfile {
 
+    Candidate findByEmail(String email);
+
     Candidate savePhotoProfile(int id, byte[] profilePic);
 
     Candidate getProfile(int id);
@@ -38,7 +40,6 @@ public interface IProfile {
     Education patchEducation(int id, String educationId,  Education education);
 
     Boolean deleteEducation(int candidateId, int educationId);
-
 
 
     List<Skill> getSkillByKeywordList(int candidateId, String skill);

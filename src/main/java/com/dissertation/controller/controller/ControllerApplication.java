@@ -39,7 +39,6 @@ public class ControllerApplication {
 		return rt;
 	}
 
-
 	public static class HttpEntityEnclosingDeleteRequest extends HttpEntityEnclosingRequestBase {
 
 		public HttpEntityEnclosingDeleteRequest(final URI uri) {

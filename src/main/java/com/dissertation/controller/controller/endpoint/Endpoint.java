@@ -2,6 +2,8 @@ package com.dissertation.controller.controller.endpoint;
 
 public interface Endpoint {
 
+    public static final String FIND_BY_EMAIL = "/api/candidate/find-by-email";
+
     public static final String SUMMARY_SAVE = "/api/candidate/{id}/save/summary";
     public static final String SUMMARY_GET = "/api/candidate/{id}/get/summary";
 

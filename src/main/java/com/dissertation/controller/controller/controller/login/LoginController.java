@@ -1,27 +1,54 @@
 package com.dissertation.controller.controller.controller.login;
 
+import com.dissertation.controller.controller.auth.jwt.services.MyUserDetailsService;
+import com.dissertation.controller.controller.auth.jwt.util.JWTUtil;
+import com.dissertation.controller.controller.model.jwt.ResponseJwt;
 import com.dissertation.controller.controller.model.login.Login;
 import com.dissertation.controller.controller.model.login.ResponseLogin;
 import com.dissertation.controller.controller.service.login.ILogin;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin("http://localhost:4300")
 public class LoginController {
 
-    @Autowired
-    private ILogin loginService;
+    private final ILogin loginService;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final MyUserDetailsService userDetailsService;
+
+    private final JWTUtil jwtTokenUtil;
 
     @PatchMapping("/login")
     public ResponseEntity<ResponseLogin> loginAction(@RequestBody Login credentials){
         ResponseLogin response = this.loginService.login(credentials);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody Login authenticationRequest) throws Exception{
+
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+            );
+        }catch (BadCredentialsException bce){
+            throw new Exception("Incorrect username or password");
+        }
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
+        final String jwt  = jwtTokenUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new ResponseJwt(jwt));
+    }
+
 }

@@ -1,12 +1,10 @@
 package com.dissertation.controller.controller.model.jwt;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@RequiredArgsConstructor
 public class ResponseJwt {
-    private String jwt;
+    private final String jwt;
 }
