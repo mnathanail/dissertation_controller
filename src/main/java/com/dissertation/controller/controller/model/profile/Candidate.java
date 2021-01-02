@@ -1,5 +1,6 @@
 package com.dissertation.controller.controller.model.profile;
 
+import com.dissertation.controller.controller.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class Candidate {
     private String image;
     private byte[] profilePic;
     private String password;
-    private Set<String> roles;
+    private Set<Role> roles;
 }

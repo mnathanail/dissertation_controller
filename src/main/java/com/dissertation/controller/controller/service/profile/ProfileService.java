@@ -9,6 +9,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
 
@@ -23,9 +24,15 @@ public class ProfileService implements IProfile {
 
     @Override
     public Candidate findByEmail(String email) {
-        Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("email", email);
-        return this.restTemplate.getForObject(Endpoint.FIND_BY_EMAIL, Candidate.class, urlParams);
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.FIND_BY_EMAIL)
+                .queryParam("email", email);
+        String url = uriBuilder.toUriString();
+        ResponseEntity<Candidate> candidate = this.restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                Candidate.class);
+        return candidate.getBody();
     }
 
     @Override

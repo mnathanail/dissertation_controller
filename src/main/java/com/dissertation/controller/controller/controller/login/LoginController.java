@@ -11,7 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -37,18 +38,35 @@ public class LoginController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Login authenticationRequest) throws Exception{
 
         try{
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+            Authentication authenticate = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getUsername(),
+                            authenticationRequest.getPassword()
+                    )
             );
+
+            User user = (User) authenticate.getPrincipal();
+
+            final String jwt  = jwtTokenUtil.generateToken(user);
+
+            return ResponseEntity.ok(new ResponseJwt(jwt));
+
         }catch (BadCredentialsException bce){
-            throw new Exception("Incorrect username or password");
+            throw new Exception(bce + " OIncorrect username or password");
         }
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        /*final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
         final String jwt  = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new ResponseJwt(jwt));
+        return ResponseEntity.ok(new ResponseJwt(jwt));*/
     }
+
+    @PostMapping("/takis")
+    public String ooo (){
+        return "Manos";
+    }
+
+
 
 }

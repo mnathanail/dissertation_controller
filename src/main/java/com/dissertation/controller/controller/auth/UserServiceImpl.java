@@ -1,24 +1,22 @@
 package com.dissertation.controller.controller.auth;
 
 import com.dissertation.controller.controller.model.profile.Candidate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
 public class UserServiceImpl implements IUserService, UserDetailsService {
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptEncoder;
+   /* @Autowired
+    private BCryptPasswordEncoder bCryptEncoder;*/
 
 
 
     @Override
     public Long saveUser(Candidate candidate) {
-        candidate.setPassword(bCryptEncoder.encode(candidate.getPassword()));
+        //candidate.setPassword(bCryptEncoder.encode(candidate.getPassword()));
 
         return null;
     }

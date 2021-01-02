@@ -119,8 +119,8 @@ public class ProfileCandidateController {
     @DeleteMapping("/profile/{id}/delete/education/{educationId}")
     public ResponseEntity<Boolean> deleteEducation(@PathVariable("id") int candidateId,
                                                     @PathVariable("educationId") int educationId){
-        this.profileService.deleteEducation(candidateId, educationId);
-        return ResponseEntity.ok(true);
+        Boolean deleted = this.profileService.deleteEducation(candidateId, educationId);
+        return ResponseEntity.ok(deleted);
     }
     // End of Education!
 
