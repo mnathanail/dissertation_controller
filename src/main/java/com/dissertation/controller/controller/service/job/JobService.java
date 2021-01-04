@@ -18,7 +18,6 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-//@CrossOrigin("http://localhost:4300")
 public class JobService implements IJob{
 
     @Qualifier("restTemplateBean")

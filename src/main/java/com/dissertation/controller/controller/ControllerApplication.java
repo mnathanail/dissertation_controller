@@ -13,7 +13,8 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import java.net.URI;
 
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+//SecurityAutoConfiguration.class,DataSourceAutoConfiguration.class,
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 public class ControllerApplication {
 
 	public static void main(String[] args) {

@@ -11,7 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 @NoArgsConstructor
 public class Role implements GrantedAuthority {
 
-    public static final String CANDIDATE = "CANDIDATE";
+    public static final String CANDIDATE = "ROLE_CANDIDATE";
     public static final String RECRUITER = "RECRUITER";
     public static final String CANDIDATE_RECRUITER = "CANDIDATE_RECRUITER";
 

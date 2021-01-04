@@ -4,11 +4,12 @@ import com.dissertation.controller.controller.model.profile.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface IProfile {
 
-    Candidate findByEmail(String email);
+    Optional<Candidate> findByEmail(String email);
 
     Candidate savePhotoProfile(int id, byte[] profilePic);
 

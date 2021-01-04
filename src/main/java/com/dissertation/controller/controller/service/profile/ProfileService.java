@@ -23,15 +23,16 @@ public class ProfileService implements IProfile {
     //Candidate
 
     @Override
-    public Candidate findByEmail(String email) {
+    public Optional<Candidate> findByEmail(String email) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.FIND_BY_EMAIL)
                 .queryParam("email", email);
         String url = uriBuilder.toUriString();
-        ResponseEntity<Candidate> candidate = this.restTemplate.exchange(
+        ResponseEntity<Optional<Candidate>> candidate = this.restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
-                Candidate.class);
+                new ParameterizedTypeReference<Optional<Candidate>>() {
+                });
         return candidate.getBody();
     }
 
@@ -40,10 +41,14 @@ public class ProfileService implements IProfile {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
 
-        Candidate candidate = new Candidate();
-        candidate.setProfilePic(profilePic);
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.CANDIDATE_PROFILE_PHOTO_SAVE)
+                .queryParam("profilePic", profilePic);
+        String url = uriBuilder.toUriString();
 
-        return this.restTemplate.postForObject(Endpoint.CANDIDATE_PROFILE_PHOTO_SAVE, candidate , Candidate.class, urlParams);
+       /* Candidate candidate = new Candidate();
+        candidate.setProfilePic(profilePic);*/
+
+        return this.restTemplate.exchange(url, HttpMethod.POST, null,  Candidate.class, urlParams).getBody();
     }
 
     @Override

@@ -74,7 +74,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         chain.doFilter(request, response);
 
     }
+
+/*
+    @Bean("globalCandidateId")
+    public String testBean(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null){
+            Candidate a = this.userDetailsService.loadUserByEmail(auth.getName());
+            return a.getId().toString();
+        }
+        return "null";
+    }*/
 }

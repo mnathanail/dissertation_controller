@@ -1,17 +1,12 @@
 package com.dissertation.controller.controller.model.profile;
 
 import com.dissertation.controller.controller.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder()
 public class Candidate {
     private Long id;
     private String name;
@@ -19,6 +14,8 @@ public class Candidate {
     private String email;
     private String image;
     private byte[] profilePic;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    private Set<Role> roles;
+    private Set<Role> authorities;
+
 }
