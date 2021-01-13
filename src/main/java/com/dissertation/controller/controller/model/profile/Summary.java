@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder()
 public class Summary {
-    private int id;
+    private String id;
     private String summary;
 }
 

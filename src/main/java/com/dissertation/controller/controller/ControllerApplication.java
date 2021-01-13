@@ -14,43 +14,50 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import java.net.URI;
 
 //SecurityAutoConfiguration.class,DataSourceAutoConfiguration.class,
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class ControllerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ControllerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ControllerApplication.class, args);
+    }
 
-	@Bean("restTemplateBean")
-	public RestTemplate getRestTemplate() {
-		RestTemplate rt = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
+    @Bean("restTemplateBean")
+    public RestTemplate getRestTemplate() {
+        RestTemplate rt = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
 
-		rt.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081"));
+        rt.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081"));
 
-		rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory() {
-			@Override
-			protected HttpUriRequest createHttpUriRequest(HttpMethod httpMethod, URI uri) {
-				if (HttpMethod.DELETE == httpMethod) {
-					return new HttpEntityEnclosingDeleteRequest(uri);
-				}
-				return super.createHttpUriRequest(httpMethod, uri);
-			}
-		});
+        rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory() {
+            @Override
+            protected HttpUriRequest createHttpUriRequest(HttpMethod httpMethod, URI uri) {
+                if (HttpMethod.DELETE == httpMethod) {
+                    return new HttpEntityEnclosingDeleteRequest(uri);
+                }
+                return super.createHttpUriRequest(httpMethod, uri);
+            }
+        });
 
-		return rt;
-	}
+        return rt;
+    }
 
-	public static class HttpEntityEnclosingDeleteRequest extends HttpEntityEnclosingRequestBase {
+    public static class HttpEntityEnclosingDeleteRequest extends HttpEntityEnclosingRequestBase {
 
-		public HttpEntityEnclosingDeleteRequest(final URI uri) {
-			super();
-			setURI(uri);
-		}
+        public HttpEntityEnclosingDeleteRequest(final URI uri) {
+            super();
+            setURI(uri);
+        }
 
-		@Override
-		public String getMethod() {
-			return "DELETE";
-		}
-	}
-
+        @Override
+        public String getMethod() {
+            return "DELETE";
+        }
+    }
+/*    @Bean("globalCandidateId")
+    public String testBean() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
+            return authentication.getName();
+        }
+        return "";
+    }*/
 }

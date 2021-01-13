@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+
 @JsonPropertyOrder({
         "id",
         "educationId",
@@ -25,10 +27,13 @@ public class Education {
     public Long id;
     @JsonProperty("educationId")
     public String educationId;
+    @NotEmpty(message = "Title is required")
     @JsonProperty("title")
     public String title;
+    @NotEmpty(message = "Degree is required")
     @JsonProperty("degree")
     public String degree;
+    @NotEmpty(message = "School is required")
     @JsonProperty("school")
     public String school;
     @JsonProperty("period")

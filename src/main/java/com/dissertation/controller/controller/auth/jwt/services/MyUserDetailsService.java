@@ -1,38 +1,43 @@
 package com.dissertation.controller.controller.auth.jwt.services;
 
+import com.dissertation.controller.controller.model.Role;
 import com.dissertation.controller.controller.model.profile.Candidate;
 import com.dissertation.controller.controller.service.profile.IProfile;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-    private final IProfile iProfile;
+    @Autowired
+    private IProfile iProfile;
 
     private Candidate globalCandidate = null;
 
     @Override
-    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         //email instead of username!
-        Candidate candidate = this.iProfile.findByEmail(email).orElseThrow();
-        Set<SimpleGrantedAuthority> authorities = candidate.getAuthorities().stream()
-            .map(role -> new SimpleGrantedAuthority("ROLE_"+role.getAuthority()))
+        Candidate candidate = this.iProfile.findByEmail(email);
+
+        Set<Role> authorities = candidate.getAuthorities().stream()
+            .map(role -> new Role("ROLE_"+role.getAuthority()))
             .collect(Collectors.toSet());
         globalCandidate = candidate;
         BeanUtils.copyProperties(candidate, globalCandidate);
 
-        return new User(candidate.getEmail(), candidate.getPassword(), authorities);
+        return new Candidate(candidate.getEmail(), candidate.getPassword(), authorities,candidate.getId());
     }
 
     public Candidate loadUserByEmail(String email) throws UsernameNotFoundException {
@@ -40,8 +45,8 @@ public class MyUserDetailsService implements UserDetailsService {
             return globalCandidate;
         }
         else {
-            Optional<Candidate> candidate = this.iProfile.findByEmail(email);
-            return candidate.orElseThrow();
+            Candidate candidate = this.iProfile.findByEmail(email);
+            return candidate;
         }
     }
 

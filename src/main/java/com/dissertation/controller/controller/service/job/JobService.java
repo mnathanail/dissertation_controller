@@ -1,10 +1,12 @@
 package com.dissertation.controller.controller.service.job;
 
 import com.dissertation.controller.controller.endpoint.Endpoint;
+import com.dissertation.controller.controller.model.job.RestResponsePage;
 import com.dissertation.controller.controller.model.profile.JobPosting;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -97,19 +99,34 @@ public class JobService implements IJob{
     }
 
     @Override
-    public List<JobPosting> candidateSearchJobByKeywords(List<String> keywords) {
+    public Page<JobPosting> candidateSearchJobByKeywords(List<String> keywords, String page) {
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.CANDIDATE_SEARCH_JOB_BY_KEYWORDS)
-                .queryParam("keywords", keywords);
+                .queryParam("keywords", keywords).queryParam("page", page).queryParam("size", "2");
         String url = uriBuilder.toUriString();
-        ResponseEntity<List<JobPosting>> candidateApplyForJob =
+
+        ResponseEntity<RestResponsePage<JobPosting>> candidateApplyForJob =
                 this.restTemplate.exchange(
                         url,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<List<JobPosting>>() {}
+                        new ParameterizedTypeReference<>() {}
                         );
-        return  candidateApplyForJob.getBody();
+        return candidateApplyForJob.getBody();
+    }
+
+    @Override
+    public String getRecruiterIdByJobId(String jobId) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("jobId", jobId);
+
+        ResponseEntity<String> exchange = this.restTemplate.exchange(
+                Endpoint.RECRUITER_BY_JOB,
+                HttpMethod.GET,
+                new HttpEntity<String>(""),
+                String.class,
+                urlParams);
+        return exchange.getBody();
     }
 
 

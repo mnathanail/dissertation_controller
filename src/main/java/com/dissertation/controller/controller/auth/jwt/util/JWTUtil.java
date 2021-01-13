@@ -67,6 +67,7 @@ public class JWTUtil {
             logger.error("Invalid JWT token - {}", ex.getMessage());
         } catch (ExpiredJwtException ex) {
             logger.error("Expired JWT token - {}", ex.getMessage());
+            throw new ExpiredJwtException(ex.getHeader(), ex.getClaims(), ex.getMessage());
         } catch (UnsupportedJwtException ex) {
             logger.error("Unsupported JWT token - {}", ex.getMessage());
         } catch (IllegalArgumentException ex) {

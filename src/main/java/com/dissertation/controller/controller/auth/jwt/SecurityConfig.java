@@ -3,9 +3,9 @@ package com.dissertation.controller.controller.auth.jwt;
 import com.dissertation.controller.controller.auth.jwt.filter.JwtRequestFilter;
 import com.dissertation.controller.controller.auth.jwt.services.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,12 +20,8 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true
-)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MyUserDetailsService myUserDetailsService;
@@ -60,9 +56,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(
                         (request, response, ex) -> response.sendError(
                                 HttpServletResponse.SC_UNAUTHORIZED,
-                                ex.getMessage()
+                                "Unauthorized 401 "+ex.getMessage()
                         )
                 )
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler((request, response, ex) -> response.sendError(
+                        HttpServletResponse.SC_FORBIDDEN,
+                        "Forbidden 403 "+ex.getMessage()
+                ))
                 .and();
 
         // Set permissions on endpoints

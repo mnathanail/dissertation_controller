@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class Skill {
     private int id;
     private int entityId;
+    @NotEmpty(message = "Name is required")
     private String name;
+    @NotEmpty(message = "Years of Experience are required")
     private Long yearsOfExperience;
 }

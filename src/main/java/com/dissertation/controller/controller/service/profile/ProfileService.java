@@ -23,23 +23,24 @@ public class ProfileService implements IProfile {
     //Candidate
 
     @Override
-    public Optional<Candidate> findByEmail(String email) {
+    public Candidate findByEmail(String email) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.FIND_BY_EMAIL)
                 .queryParam("email", email);
         String url = uriBuilder.toUriString();
-        ResponseEntity<Optional<Candidate>> candidate = this.restTemplate.exchange(
+        ResponseEntity<Candidate> candidate = this.restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<Optional<Candidate>>() {
-                });
+                //new ParameterizedTypeReference<Optional<Candidate>>() {}
+                Candidate.class
+                );
         return candidate.getBody();
     }
 
     @Override
-    public Candidate savePhotoProfile(int candidateId, byte[] profilePic) {
+    public Candidate savePhotoProfile(String candidateId, byte[] profilePic) {
         Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("id", String.valueOf(candidateId));
+        urlParams.put("id", candidateId);
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.CANDIDATE_PROFILE_PHOTO_SAVE)
                 .queryParam("profilePic", profilePic);
@@ -52,15 +53,15 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public Candidate getProfile(int candidateId) {
+    public Candidate getProfile(String candidateId) {
         Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("id", String.valueOf(candidateId));
+        urlParams.put("id", candidateId);
 
         return this.restTemplate.getForObject(Endpoint.CANDIDATE_PROFILE_GET, Candidate.class, urlParams);
     }
 
     @Override
-    public Summary insertOrUpdateSummary(int id, Summary summary) {
+    public Summary insertOrUpdateSummary(String id, Summary summary) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -85,7 +86,7 @@ public class ProfileService implements IProfile {
 
     // Experience
     @Override
-    public Experience saveExperience(int id, Experience experience) {
+    public Experience saveExperience(String id, Experience experience) {
         //id=1;
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(id));
@@ -93,7 +94,7 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public Experience getExperience(int candidateId, String experienceId ) {
+    public Experience getExperience(String candidateId, String experienceId ) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("experienceId", String.valueOf(experienceId));
@@ -101,9 +102,9 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public List<Experience> getExperienceList(int candidateId) {
+    public List<Experience> getExperienceList(String candidateId) {
         Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("id", String.valueOf(candidateId));
+        urlParams.put("id", candidateId);
         ResponseEntity<List<Experience>> a =
                 this.restTemplate.exchange(
                         Endpoint.EXPERIENCE_LIST_GET,
@@ -115,7 +116,7 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public Experience patchExperience(int candidateId, String experienceId,  Experience experience) {
+    public Experience patchExperience(String candidateId, String experienceId,  Experience experience) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("experienceId", experienceId);
@@ -132,7 +133,7 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public Boolean deleteExperience(int candidateId, String experienceId) {
+    public Boolean deleteExperience(String candidateId, String experienceId) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("experienceId", experienceId);
@@ -150,14 +151,14 @@ public class ProfileService implements IProfile {
 
     // Education
     @Override
-    public Education saveEducation(int id, Education education) {
+    public Education saveEducation(String id, Education education) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(id));
         return this.restTemplate.postForObject(Endpoint.EDUCATION_SAVE,education, Education.class, urlParams);
     }
 
     @Override
-    public Education getEducation(int candidateId, String educationId ) {
+    public Education getEducation(String candidateId, String educationId ) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("educationId", educationId);
@@ -165,7 +166,7 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public Set<Education> getEducationList(int candidateId) {
+    public Set<Education> getEducationList(String candidateId) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         ResponseEntity<Set<Education>> educationEntity =
@@ -179,7 +180,7 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public Education patchEducation(int candidateId, String educationId,  Education education) {
+    public Education patchEducation(String candidateId, String educationId,  Education education) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("educationId", educationId);
@@ -196,7 +197,7 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public Boolean deleteEducation(int candidateId, int educationId) {
+    public Boolean deleteEducation(String candidateId, int educationId) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("educationId", String.valueOf(educationId));
@@ -215,9 +216,8 @@ public class ProfileService implements IProfile {
     // Skiils
 
     @Override
-    public List<Skill> getSkillByKeywordList(int candidateId, String skill) {
+    public List<Skill> getSkillByKeywordList(String skill) {
         Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("id", String.valueOf(candidateId));
         urlParams.put("skill", skill);
 
         /*UriComponents uriComponents = UriComponentsBuilder.fromUriString(Endpoint.SKILL_LIST_GET)
@@ -240,9 +240,9 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public HashSet<SkillResponse> getCandidateSkillList(int candidateId) {
+    public HashSet<SkillResponse> getCandidateSkillList(String candidateId) {
         Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("id", String.valueOf(candidateId));
+        urlParams.put("id", candidateId);
 
         ResponseEntity<HashSet<SkillResponse>> skillResponseEntity =
                 this.restTemplate.exchange(
@@ -256,9 +256,9 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public List<Skill> saveNewSkillList(int candidateId, List<Skill> skill) {
+    public List<Skill> saveNewSkillList(String candidateId, List<Skill> skill) {
         Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("id", String.valueOf(candidateId));
+        urlParams.put("id", candidateId);
 
         ResponseEntity<List<Skill>> skillResponseEntity =
                 this.restTemplate.exchange(
@@ -273,7 +273,7 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public HashSet<SkillResponse> saveNewCandidateSkillList(int candidateId, List<Skill> skills) {
+    public HashSet<SkillResponse> saveNewCandidateSkillList(String candidateId, List<Skill> skills) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
 
@@ -291,7 +291,7 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public List<SkillResponse> patchCandidateSkillList(int candidateId, List<SkillResponse> skills) {
+    public List<SkillResponse> patchCandidateSkillList(String candidateId, List<SkillResponse> skills) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));
 
@@ -308,7 +308,7 @@ public class ProfileService implements IProfile {
     }
 
     @Override
-    public Boolean deleteCandidateSkill(int candidateId, String skillUuid) {
+    public Boolean deleteCandidateSkill(String candidateId, String skillUuid) {
         //candidateId =1;
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", String.valueOf(candidateId));

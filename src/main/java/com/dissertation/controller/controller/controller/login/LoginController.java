@@ -2,7 +2,6 @@ package com.dissertation.controller.controller.controller.login;
 
 import com.dissertation.controller.controller.auth.jwt.services.MyUserDetailsService;
 import com.dissertation.controller.controller.auth.jwt.util.JWTUtil;
-import com.dissertation.controller.controller.model.Role;
 import com.dissertation.controller.controller.model.login.Login;
 import com.dissertation.controller.controller.model.login.ResponseLogin;
 import com.dissertation.controller.controller.model.profile.Candidate;
@@ -10,20 +9,17 @@ import com.dissertation.controller.controller.service.login.ILogin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.security.RolesAllowed;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin("http://localhost:4300")
 public class LoginController {
 
     private final ILogin loginService;
@@ -51,7 +47,7 @@ public class LoginController {
                     )
             );
 
-            User user = (User) authenticate.getPrincipal();
+            Candidate user = (Candidate) authenticate.getPrincipal();
 
             Candidate candidate = this.userDetailsService.loadUserByEmail(user.getUsername());
 
@@ -76,15 +72,5 @@ public class LoginController {
 
         return ResponseEntity.ok(new ResponseJwt(jwt));*/
     }
-
-    @PreAuthorize("hasAuthority('ROLE_CANDIDATE')")
-    @RolesAllowed({Role.CANDIDATE})
-    @PostMapping("/takis")
-    public String ooo (){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return "Manos";
-    }
-
-
 
 }

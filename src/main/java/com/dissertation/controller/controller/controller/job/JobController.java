@@ -3,7 +3,9 @@ package com.dissertation.controller.controller.controller.job;
 import com.dissertation.controller.controller.model.profile.JobPosting;
 import com.dissertation.controller.controller.service.job.IJob;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,11 +13,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/controller")
-@CrossOrigin("http://localhost:4300")
 public class JobController {
 
     private final IJob jobService;
 
+    @PreAuthorize("isOwner(#recruiterId) and hasAnyAuthority('ROLE_RECRUITER')")
     @PostMapping("/job-posting/{id}/save/job")
     public ResponseEntity<JobPosting> saveJob
             (@PathVariable("id") int recruiterId, @RequestBody JobPosting jobPosting){
@@ -29,6 +31,7 @@ public class JobController {
         return ResponseEntity.ok(job);
     }
 
+    @PreAuthorize("isOwner(#recruiterId) and hasAnyAuthority('ROLE_RECRUITER')")
     @PatchMapping("/{recruiterId}/patch/job/{jobId}")
     public ResponseEntity<JobPosting> patchJob(
             @PathVariable("recruiterId") int recruiterId,
@@ -39,10 +42,18 @@ public class JobController {
         return ResponseEntity.ok(job);
     }
 
+    @PreAuthorize("isOwner(#recruiterId) and hasAnyAuthority('ROLE_RECRUITER')")
     @DeleteMapping("/{recruiterId}/delete/job/{jobId}")
     public ResponseEntity<Boolean> deleteJob(@PathVariable("recruiterId") String recruiterId, @PathVariable("jobId") String jobId){
         Boolean isDeleted = this.jobService.deleteJob(recruiterId, jobId);
         return ResponseEntity.ok(isDeleted);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_RECRUITER')")
+    @GetMapping("/get/recruiter")
+    public ResponseEntity<String> getRecruiterIdByJobId(@RequestParam("jobId") String jobId){
+        String recruiterId = this.jobService.getRecruiterIdByJobId(jobId);
+        return ResponseEntity.ok(recruiterId);
     }
 
     @PostMapping("/candidate/{candidateId}/apply/job/{jobId}")
@@ -52,8 +63,13 @@ public class JobController {
     }
 
     @GetMapping("/candidate/search/job/keywords")
-    public ResponseEntity<List<JobPosting>> candidateApplyForJob(@RequestParam("keywords") List<String> keywords){
-        List<JobPosting> jobList = this.jobService.candidateSearchJobByKeywords(keywords);
+    public ResponseEntity<Page<JobPosting>> candidateApplyForJob(@RequestParam("keywords") List<String> keywords,
+                                                                 @RequestParam(value = "page", required=false) String page){
+        if(page.equals("undefined")){
+            page = "0";
+        }
+        Page<JobPosting> jobList = this.jobService.candidateSearchJobByKeywords(keywords, page);
         return ResponseEntity.ok(jobList);
+
     }
 }

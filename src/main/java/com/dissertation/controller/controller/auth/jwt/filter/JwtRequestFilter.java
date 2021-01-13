@@ -38,9 +38,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
      * <p>Provides HttpServletRequest and HttpServletResponse arguments instead of the
      * default ServletRequest and ServletResponse ones.
      *
-     * @param request HttpServletRequest
+     * @param request  HttpServletRequest
      * @param response HttpServletResponse
-     * @param chain FilterChain
+     * @param chain    FilterChain
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
@@ -79,14 +79,4 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     }
 
-/*
-    @Bean("globalCandidateId")
-    public String testBean(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null){
-            Candidate a = this.userDetailsService.loadUserByEmail(auth.getName());
-            return a.getId().toString();
-        }
-        return "null";
-    }*/
 }

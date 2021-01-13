@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+
 @JsonPropertyOrder({
         "experienceId",
         "jobTitle",
@@ -22,6 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder()
 public class Experience {
+    @NotEmpty(message = "Company is required")
     @JsonProperty("companyName")
     public String companyName;
     @JsonProperty("description")

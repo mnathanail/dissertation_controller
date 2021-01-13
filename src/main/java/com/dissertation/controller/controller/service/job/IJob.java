@@ -1,6 +1,7 @@
 package com.dissertation.controller.controller.service.job;
 
 import com.dissertation.controller.controller.model.profile.JobPosting;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,5 +17,7 @@ public interface IJob {
 
     Boolean candidateApplyForJob(int candidateId, String jobId);
 
-    List<JobPosting> candidateSearchJobByKeywords(List<String> keywords);
+    Page<JobPosting> candidateSearchJobByKeywords(List<String> keywords, String page);
+
+    String getRecruiterIdByJobId(String jobId);
 }

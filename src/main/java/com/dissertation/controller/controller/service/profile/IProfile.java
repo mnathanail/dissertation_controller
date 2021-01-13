@@ -4,55 +4,54 @@ import com.dissertation.controller.controller.model.profile.*;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface IProfile {
 
-    Optional<Candidate> findByEmail(String email);
+    Candidate findByEmail(String email);
 
-    Candidate savePhotoProfile(int id, byte[] profilePic);
+    Candidate savePhotoProfile(String id, byte[] profilePic);
 
-    Candidate getProfile(int id);
+    Candidate getProfile(String id);
 
 
-    Summary insertOrUpdateSummary(int id, Summary summary);
+    Summary insertOrUpdateSummary(String id, Summary summary);
 
     Summary getSummary(String id);
 
 
-    Experience saveExperience(int id, Experience experience);
+    Experience saveExperience(String id, Experience experience);
 
-    Experience getExperience(int candidateId, String experienceId);
+    Experience getExperience(String candidateId, String experienceId);
 
-    List<Experience> getExperienceList(int candidateId);
+    List<Experience> getExperienceList(String candidateId);
 
-    Experience patchExperience(int id, String experienceId,  Experience experience);
+    Experience patchExperience(String id, String experienceId,  Experience experience);
 
-    Boolean deleteExperience(int candidateId, String experienceId);
-
-
-    Education saveEducation(int id, Education education);
-
-    Education getEducation(int candidateId, String educationId);
-
-    Set<Education> getEducationList(int candidateId);
-
-    Education patchEducation(int id, String educationId,  Education education);
-
-    Boolean deleteEducation(int candidateId, int educationId);
+    Boolean deleteExperience(String candidateId, String experienceId);
 
 
-    List<Skill> getSkillByKeywordList(int candidateId, String skill);
+    Education saveEducation(String id, Education education);
 
-    HashSet<SkillResponse> getCandidateSkillList(int candidateId);
+    Education getEducation(String candidateId, String educationId);
 
-    List<Skill> saveNewSkillList(int candidateId, List<Skill> skill);
+    Set<Education> getEducationList(String candidateId);
 
-    HashSet<SkillResponse> saveNewCandidateSkillList(int candidateId, List<Skill> skills);
+    Education patchEducation(String id, String educationId,  Education education);
 
-    List<SkillResponse> patchCandidateSkillList(int candidateId, List<SkillResponse> skills);
+    Boolean deleteEducation(String candidateId, int educationId);
 
-    Boolean deleteCandidateSkill(int candidateId, String skillUuid);
+
+    List<Skill> getSkillByKeywordList(String skill);
+
+    HashSet<SkillResponse> getCandidateSkillList(String candidateId);
+
+    List<Skill> saveNewSkillList(String candidateId, List<Skill> skill);
+
+    HashSet<SkillResponse> saveNewCandidateSkillList(String candidateId, List<Skill> skills);
+
+    List<SkillResponse> patchCandidateSkillList(String candidateId, List<SkillResponse> skills);
+
+    Boolean deleteCandidateSkill(String candidateId, String skillUuid);
 
 }
