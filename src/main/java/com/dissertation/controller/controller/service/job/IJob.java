@@ -17,7 +17,14 @@ public interface IJob {
 
     Boolean candidateApplyForJob(int candidateId, String jobId);
 
+    Boolean candidateDeleteApplyForJob(int candidateId, String jobId);
+
     Page<JobPosting> candidateSearchJobByKeywords(List<String> keywords, String page);
 
     String getRecruiterIdByJobId(String jobId);
+
+    List<JobPosting> getCandidateAppliedJobList(int candidateId);
+
+    List<JobPosting> getRecruiterManagesJobList(int recruiterId);
+
 }

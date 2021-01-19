@@ -41,5 +41,10 @@ public interface Endpoint {
     String JOB_GET = "/api/job/get/job/{jobId}";
     String CANDIDATE_APPLY_FOR_JOB = "/api/job/apply/candidate/{candidateId}/job/{jobId}";
 
+    String CANDIDATE_DELETE_APPLY_FOR_JOB = "/api/job/delete/apply/candidate/{candidateId}/job/{jobId}";
+
+    String JOB_GET_CANDIDATE_APPLIED_LIST ="api/candidate/{candidateId}/get/applied-job-list";
+    String JOB_GET_RECRUITER_MANAGES_LIST ="api/recruiter/{recruiterId}/get/manages-job-list";
+
     String CANDIDATE_SEARCH_JOB_BY_KEYWORDS = "/api/job/candidate/search/job/keywords";
 }

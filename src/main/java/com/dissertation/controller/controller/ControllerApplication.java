@@ -60,4 +60,10 @@ public class ControllerApplication {
         }
         return "";
     }*/
+
+
+/*    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }*/
 }

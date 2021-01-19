@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,8 @@ public class LoginController {
 
     private final JWTUtil jwtTokenUtil;
 
+    private final PasswordEncoder bCryptEncoder;
+
     @PatchMapping("/login")
     public ResponseEntity<ResponseLogin> loginAction(@RequestBody Login credentials){
         ResponseLogin response = this.loginService.login(credentials);
@@ -38,7 +41,6 @@ public class LoginController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Login authenticationRequest) throws Exception{
-
         try{
             Authentication authenticate = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

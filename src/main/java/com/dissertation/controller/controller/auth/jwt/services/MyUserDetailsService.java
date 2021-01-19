@@ -36,7 +36,6 @@ public class MyUserDetailsService implements UserDetailsService {
             .collect(Collectors.toSet());
         globalCandidate = candidate;
         BeanUtils.copyProperties(candidate, globalCandidate);
-
         return new Candidate(candidate.getEmail(), candidate.getPassword(), authorities,candidate.getId());
     }
 
@@ -45,8 +44,7 @@ public class MyUserDetailsService implements UserDetailsService {
             return globalCandidate;
         }
         else {
-            Candidate candidate = this.iProfile.findByEmail(email);
-            return candidate;
+            return this.iProfile.findByEmail(email);
         }
     }
 

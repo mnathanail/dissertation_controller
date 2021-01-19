@@ -25,26 +25,26 @@ public class JobController {
         return ResponseEntity.ok(job);
     }
 
-    @GetMapping("/job-view/get/job/{jobId}")
-    public ResponseEntity<JobPosting> getJob(@PathVariable("jobId") String jobId){
+    @GetMapping("/job-view/get/job")
+    public ResponseEntity<JobPosting> getJob(@RequestParam("jobId") String jobId){
         JobPosting job = this.jobService.getJob(jobId);
         return ResponseEntity.ok(job);
     }
 
     @PreAuthorize("isOwner(#recruiterId) and hasAnyAuthority('ROLE_RECRUITER')")
-    @PatchMapping("/{recruiterId}/patch/job/{jobId}")
+    @PatchMapping("/patch/job")
     public ResponseEntity<JobPosting> patchJob(
-            @PathVariable("recruiterId") int recruiterId,
+            @RequestParam("recruiterId") int recruiterId,
             @RequestBody JobPosting jobPosting,
-            @PathVariable("jobId") String jobId
+            @RequestParam("jobId") String jobId
     ){
         JobPosting job = this.jobService.patchJob(recruiterId, jobId,jobPosting);
         return ResponseEntity.ok(job);
     }
 
     @PreAuthorize("isOwner(#recruiterId) and hasAnyAuthority('ROLE_RECRUITER')")
-    @DeleteMapping("/{recruiterId}/delete/job/{jobId}")
-    public ResponseEntity<Boolean> deleteJob(@PathVariable("recruiterId") String recruiterId, @PathVariable("jobId") String jobId){
+    @DeleteMapping("/delete/job")
+    public ResponseEntity<Boolean> deleteJob(@RequestParam("recruiterId") String recruiterId, @RequestParam("jobId") String jobId){
         Boolean isDeleted = this.jobService.deleteJob(recruiterId, jobId);
         return ResponseEntity.ok(isDeleted);
     }
@@ -56,9 +56,15 @@ public class JobController {
         return ResponseEntity.ok(recruiterId);
     }
 
-    @PostMapping("/candidate/{candidateId}/apply/job/{jobId}")
-    public ResponseEntity<Boolean> candidateApplyForJob(@PathVariable("candidateId") int candidateId, @PathVariable("jobId") String jobId){
+    @PostMapping("/candidate/apply/job")
+    public ResponseEntity<Boolean> candidateApplyForJob(@RequestParam("candidateId") int candidateId, @RequestParam("jobId") String jobId){
         Boolean isApplied = this.jobService.candidateApplyForJob(candidateId, jobId);
+        return ResponseEntity.ok(isApplied);
+    }
+
+    @DeleteMapping("/candidate/delete/apply/job")
+    public ResponseEntity<Boolean> candidateDeleteApplyForJob(@RequestParam("candidateId") int candidateId, @RequestParam("jobId") String jobId){
+        Boolean isApplied = this.jobService.candidateDeleteApplyForJob(candidateId, jobId);
         return ResponseEntity.ok(isApplied);
     }
 
@@ -70,6 +76,18 @@ public class JobController {
         }
         Page<JobPosting> jobList = this.jobService.candidateSearchJobByKeywords(keywords, page);
         return ResponseEntity.ok(jobList);
-
     }
+
+    @GetMapping("/candidate/get/applied-job-list")
+    public ResponseEntity<List<JobPosting>> candidateGetAppliedJobList(@RequestParam("candidateId") int candidateId){
+        List<JobPosting> jobList = this.jobService.getCandidateAppliedJobList(candidateId);
+        return ResponseEntity.ok(jobList);
+    }
+
+    @GetMapping("/recruiter/get/manage-job-list")
+    public ResponseEntity<List<JobPosting>> recruiterGetManageJobList(@RequestParam("recruiterId") int recruiterId){
+        List<JobPosting> jobList = this.jobService.getRecruiterManagesJobList(recruiterId);
+        return ResponseEntity.ok(jobList);
+    }
+
 }

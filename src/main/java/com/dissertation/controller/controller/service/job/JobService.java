@@ -99,6 +99,21 @@ public class JobService implements IJob{
     }
 
     @Override
+    public Boolean candidateDeleteApplyForJob(int candidateId, String jobId) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("candidateId", String.valueOf(candidateId));
+        urlParams.put("jobId", jobId);
+        ResponseEntity<Boolean> candidateApplyForJob =
+                this.restTemplate.exchange(
+                        Endpoint.CANDIDATE_DELETE_APPLY_FOR_JOB,
+                        HttpMethod.DELETE,
+                        new HttpEntity<>(""),
+                        Boolean.class,
+                        urlParams);
+        return  candidateApplyForJob.getBody();
+    }
+
+    @Override
     public Page<JobPosting> candidateSearchJobByKeywords(List<String> keywords, String page) {
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.CANDIDATE_SEARCH_JOB_BY_KEYWORDS)
@@ -129,5 +144,31 @@ public class JobService implements IJob{
         return exchange.getBody();
     }
 
+    @Override
+    public List<JobPosting> getCandidateAppliedJobList(int candidateId) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("candidateId", String.valueOf(candidateId));
+        ResponseEntity<List<JobPosting>> exchange = this.restTemplate.exchange(
+                Endpoint.JOB_GET_CANDIDATE_APPLIED_LIST,
+                HttpMethod.GET,
+                new HttpEntity<String>(""),
+                new ParameterizedTypeReference<>() {},
+                urlParams);
+        return exchange.getBody();
+
+    }
+
+    @Override
+    public List<JobPosting> getRecruiterManagesJobList(int recruiterId) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("recruiterId", String.valueOf(recruiterId));
+        ResponseEntity<List<JobPosting>> exchange = this.restTemplate.exchange(
+                Endpoint.JOB_GET_RECRUITER_MANAGES_LIST,
+                HttpMethod.GET,
+                new HttpEntity<String>(""),
+                new ParameterizedTypeReference<>() {},
+                urlParams);
+        return exchange.getBody();
+    }
 
 }
