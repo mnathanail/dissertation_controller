@@ -52,14 +52,7 @@ public class ControllerApplication {
             return "DELETE";
         }
     }
-/*    @Bean("globalCandidateId")
-    public String testBean() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
-            return authentication.getName();
-        }
-        return "";
-    }*/
+
 
 
 /*    @Bean

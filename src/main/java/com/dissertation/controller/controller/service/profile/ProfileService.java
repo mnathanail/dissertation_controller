@@ -21,7 +21,6 @@ public class ProfileService implements IProfile {
     private final RestTemplate restTemplate;
 
     //Candidate
-
     @Override
     public Candidate findByEmail(String email) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.FIND_BY_EMAIL)
@@ -42,14 +41,21 @@ public class ProfileService implements IProfile {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("id", candidateId);
 
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.CANDIDATE_PROFILE_PHOTO_SAVE)
-                .queryParam("profilePic", profilePic);
-        String url = uriBuilder.toUriString();
+        /*UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromHttpUrl("http://localhost:8081"+Endpoint.CANDIDATE_PROFILE_PHOTO_SAVE)
+                .queryParam("profilePic", String.valueOf(profilePic));
+        String url = uriBuilder.;*/
 
-       /* Candidate candidate = new Candidate();
-        candidate.setProfilePic(profilePic);*/
+        Candidate candidate = new Candidate();
+        candidate.setProfilePic(profilePic);
 
-        return this.restTemplate.exchange(url, HttpMethod.POST, null,  Candidate.class, urlParams).getBody();
+        return this.restTemplate.exchange(
+                Endpoint.CANDIDATE_PROFILE_PHOTO_SAVE,
+                HttpMethod.POST,
+                new HttpEntity<>(candidate),
+                Candidate.class,
+                urlParams
+        ).getBody();
     }
 
     @Override
@@ -89,7 +95,7 @@ public class ProfileService implements IProfile {
     public Experience saveExperience(String id, Experience experience) {
         //id=1;
         Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("id", String.valueOf(id));
+        urlParams.put("id", id);
         return this.restTemplate.postForObject(Endpoint.EXPERIENCE_SAVE,experience, Experience.class, urlParams);
     }
 
@@ -168,7 +174,7 @@ public class ProfileService implements IProfile {
     @Override
     public Set<Education> getEducationList(String candidateId) {
         Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("id", String.valueOf(candidateId));
+        urlParams.put("id", candidateId);
         ResponseEntity<Set<Education>> educationEntity =
                 this.restTemplate.exchange(
                         Endpoint.EDUCATION_LIST_GET,

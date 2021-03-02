@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.StandardCharsets;
+
 @RequiredArgsConstructor
 @RestController
 public class LoginController {
@@ -52,6 +54,10 @@ public class LoginController {
             Candidate user = (Candidate) authenticate.getPrincipal();
 
             Candidate candidate = this.userDetailsService.loadUserByEmail(user.getUsername());
+
+            if (candidate.getProfilePic() != null) {
+                candidate.setImage(new String(candidate.getProfilePic(), StandardCharsets.UTF_8));
+            }
 
             final String jwt  = jwtTokenUtil.generateToken(user);
 

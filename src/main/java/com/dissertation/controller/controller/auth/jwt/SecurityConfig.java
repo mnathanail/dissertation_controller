@@ -27,9 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MyUserDetailsService myUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
-   // private final JwtTokenFilter jwtTokenFilter;
+    // private final JwtTokenFilter jwtTokenFilter;
 
-    SecurityConfig(MyUserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter){
+    SecurityConfig(MyUserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter) {
         this.myUserDetailsService = myUserDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
@@ -70,14 +70,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(
                         (request, response, ex) -> response.sendError(
                                 HttpServletResponse.SC_UNAUTHORIZED,
-                                "Unauthorized 401 "+ex.getMessage()
+                                "Unauthorized 401 " + ex.getMessage()
                         )
                 )
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler((request, response, ex) -> response.sendError(
                         HttpServletResponse.SC_FORBIDDEN,
-                        "Forbidden 403 "+ex.getMessage()
+                        "Forbidden 403 " + ex.getMessage()
                 ))
                 .and();
 
@@ -129,6 +129,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
+/*    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(ImmutableList.of("*"));
+        configuration.setAllowedMethods(ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }*/
 
 /*    @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {

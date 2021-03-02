@@ -3,6 +3,7 @@ package com.dissertation.controller.controller.service.job;
 import com.dissertation.controller.controller.endpoint.Endpoint;
 import com.dissertation.controller.controller.model.job.RestResponsePage;
 import com.dissertation.controller.controller.model.profile.JobPosting;
+import com.dissertation.controller.controller.model.profile.RecommendationExtendedModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
@@ -17,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -114,6 +116,23 @@ public class JobService implements IJob{
     }
 
     @Override
+    public Boolean candidateAlreadyApplyForJob(int candidateId, String jobId) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("candidateId",String.valueOf(candidateId));
+        urlParams.put("jobId",String.valueOf(jobId));
+
+        ResponseEntity<Boolean> candidateAlreadyApplied =
+                this.restTemplate.exchange(
+                        Endpoint.CANDIDATE_ALREADY_APPLY_FOR_JOB,
+                        HttpMethod.GET,
+                        new HttpEntity<>(""),
+                        Boolean.class,
+                        urlParams
+                );
+        return candidateAlreadyApplied.getBody();
+    }
+
+    @Override
     public Page<JobPosting> candidateSearchJobByKeywords(List<String> keywords, String page) {
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost:8081"+Endpoint.CANDIDATE_SEARCH_JOB_BY_KEYWORDS)
@@ -169,6 +188,40 @@ public class JobService implements IJob{
                 new ParameterizedTypeReference<>() {},
                 urlParams);
         return exchange.getBody();
+    }
+
+    @Override
+    public Set<RecommendationExtendedModel> getRecruiterRecommendationForJob(int recruiterId, String jobId) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("jobId",jobId);
+        urlParams.put("recruiterId",String.valueOf(recruiterId));
+
+        ResponseEntity<Set<RecommendationExtendedModel>> recommendations =
+                restTemplate.exchange(
+                        Endpoint.JOB_GET_RECOMMENDATION_JOB_LIST,
+                        HttpMethod.GET,
+                        new HttpEntity<>(""),
+                        new ParameterizedTypeReference<>() {},
+                        urlParams
+                );
+        return recommendations.getBody();
+    }
+
+    @Override
+    public Set<RecommendationExtendedModel> getRecruiterRecommendationForAppliedJob(int recruiterId, String jobId) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("jobId",jobId);
+        urlParams.put("recruiterId",String.valueOf(recruiterId));
+
+        ResponseEntity<Set<RecommendationExtendedModel>> recommendations =
+                restTemplate.exchange(
+                        Endpoint.JOB_GET_RECOMMENDATION_APPLIED_JOB_LIST,
+                        HttpMethod.GET,
+                        new HttpEntity<>(""),
+                        new ParameterizedTypeReference<>() {},
+                        urlParams
+                );
+        return recommendations.getBody();
     }
 
 }

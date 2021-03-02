@@ -1,9 +1,11 @@
 package com.dissertation.controller.controller.service.job;
 
 import com.dissertation.controller.controller.model.profile.JobPosting;
+import com.dissertation.controller.controller.model.profile.RecommendationExtendedModel;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IJob {
 
@@ -19,6 +21,8 @@ public interface IJob {
 
     Boolean candidateDeleteApplyForJob(int candidateId, String jobId);
 
+    Boolean candidateAlreadyApplyForJob(int candidateId, String jobId);
+
     Page<JobPosting> candidateSearchJobByKeywords(List<String> keywords, String page);
 
     String getRecruiterIdByJobId(String jobId);
@@ -27,4 +31,7 @@ public interface IJob {
 
     List<JobPosting> getRecruiterManagesJobList(int recruiterId);
 
+    Set<RecommendationExtendedModel> getRecruiterRecommendationForJob(int recruiterId, String jobId);
+
+    Set<RecommendationExtendedModel> getRecruiterRecommendationForAppliedJob(int recruiterId, String jobId);
 }
