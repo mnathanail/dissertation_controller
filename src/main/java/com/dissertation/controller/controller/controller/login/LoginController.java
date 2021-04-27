@@ -71,7 +71,10 @@ public class LoginController {
             //return ResponseEntity.ok(new ResponseJwt(jwt));
 
         }catch (BadCredentialsException bce){
-            throw new Exception(bce + " OIncorrect username or password");
+            throw new Exception(bce + " Incorrect username or password");
+        }
+        catch (Exception exception){
+            throw new Exception("User Not Found");
         }
 
         /*final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
