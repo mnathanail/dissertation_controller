@@ -1,7 +1,9 @@
 package com.dissertation.controller.controller.service.job;
 
+import com.dissertation.controller.controller.model.profile.CandidateSearch;
 import com.dissertation.controller.controller.model.profile.JobPosting;
 import com.dissertation.controller.controller.model.profile.RecommendationExtendedModel;
+import com.dissertation.controller.controller.model.profile.SkillEntityModel;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -24,6 +26,8 @@ public interface IJob {
     Boolean candidateAlreadyApplyForJob(int candidateId, String jobId);
 
     Page<JobPosting> candidateSearchJobByKeywords(List<String> keywords, String page);
+
+    Set<CandidateSearch> searchForCandidateBySkillList(int recruiterId, SkillEntityModel[] skillList);
 
     String getRecruiterIdByJobId(String jobId);
 

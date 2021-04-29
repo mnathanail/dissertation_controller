@@ -50,4 +50,5 @@ public interface Endpoint {
     String JOB_GET_RECOMMENDATION_APPLIED_JOB_LIST ="api/job/get/recruiter/{recruiterId}/recommendation/applied/{jobId}";
 
     String CANDIDATE_SEARCH_JOB_BY_KEYWORDS = "/api/job/candidate/search/job/keywords";
+    String RECRUITER_SEARCH_CANDIDATE_BY_SKILL_LIST = "/api/recruiter/{recruiterId}/search/candidate/keywords";
 }

@@ -1,7 +1,9 @@
 package com.dissertation.controller.controller.controller.job;
 
+import com.dissertation.controller.controller.model.profile.CandidateSearch;
 import com.dissertation.controller.controller.model.profile.JobPosting;
 import com.dissertation.controller.controller.model.profile.RecommendationExtendedModel;
+import com.dissertation.controller.controller.model.profile.SkillEntityModel;
 import com.dissertation.controller.controller.service.job.IJob;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -86,6 +88,16 @@ public class JobController {
         return ResponseEntity.ok(jobList);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_RECRUITER')")
+    @PostMapping("/recruiter/search/candidate/keywords")
+    public ResponseEntity<Set<CandidateSearch>>recruiterSearchCandidateList
+            (@RequestParam("recruiterId") int recruiterId, @RequestBody SkillEntityModel[] skills) {
+        Set<CandidateSearch> candidates =
+                this.jobService.searchForCandidateBySkillList(recruiterId, skills);
+        return ResponseEntity.ok(candidates);
+
+    }
+
     @GetMapping("/candidate/get/applied-job-list")
     public ResponseEntity<List<JobPosting>> candidateGetAppliedJobList(@RequestParam("candidateId") int candidateId){
         List<JobPosting> jobList = this.jobService.getCandidateAppliedJobList(candidateId);
@@ -98,7 +110,7 @@ public class JobController {
         return ResponseEntity.ok(jobList);
     }
 
-//    @PreAuthorize("isOwner(#recruiterId) and hasAnyAuthority('ROLE_RECRUITER')")
+    @PreAuthorize("isOwner(#recruiterId) and hasAnyAuthority('ROLE_RECRUITER')")
     @GetMapping("/recruiter/get/recommendation")
     public ResponseEntity<Set<RecommendationExtendedModel>>
         recruiterGetRecommendationForJob(@RequestParam("recruiterId") int recruiterId,

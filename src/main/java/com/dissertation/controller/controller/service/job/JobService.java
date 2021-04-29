@@ -2,8 +2,10 @@ package com.dissertation.controller.controller.service.job;
 
 import com.dissertation.controller.controller.endpoint.Endpoint;
 import com.dissertation.controller.controller.model.job.RestResponsePage;
+import com.dissertation.controller.controller.model.profile.CandidateSearch;
 import com.dissertation.controller.controller.model.profile.JobPosting;
 import com.dissertation.controller.controller.model.profile.RecommendationExtendedModel;
+import com.dissertation.controller.controller.model.profile.SkillEntityModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
@@ -147,6 +149,20 @@ public class JobService implements IJob{
                         new ParameterizedTypeReference<>() {}
                         );
         return candidateApplyForJob.getBody();
+    }
+
+    @Override
+    public Set<CandidateSearch> searchForCandidateBySkillList(int recruiterId, SkillEntityModel[] skillList) {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("recruiterId", String.valueOf(recruiterId));
+
+        ResponseEntity<Set<CandidateSearch>> exchange = this.restTemplate.exchange(
+                Endpoint.RECRUITER_SEARCH_CANDIDATE_BY_SKILL_LIST,
+                HttpMethod.POST,
+                new HttpEntity<>(skillList),
+                new ParameterizedTypeReference<>() {},
+                urlParams);
+        return exchange.getBody();
     }
 
     @Override
