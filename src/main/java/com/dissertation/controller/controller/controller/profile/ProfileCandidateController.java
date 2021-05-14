@@ -1,6 +1,5 @@
 package com.dissertation.controller.controller.controller.profile;
 
-import com.dissertation.controller.controller.auth.jwt.services.SecurityService;
 import com.dissertation.controller.controller.model.profile.*;
 import com.dissertation.controller.controller.service.profile.IProfile;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +17,11 @@ import java.util.Set;
 public class ProfileCandidateController {
 
     private final IProfile profileService;
-    private final SecurityService securityService;
 
-    //Candidate Area
     @PreAuthorize("isOwner(#candidateId) and hasAnyAuthority('ROLE_CANDIDATE')")
     @PostMapping("/profile/save/profile-photo")
-    public ResponseEntity<Candidate> postProfilePhoto(@RequestParam("candidateId") String candidateId, @RequestBody CandidateImage profilePic) {
+    public ResponseEntity<Candidate> postProfilePhoto(@RequestParam("candidateId") String candidateId,
+                                                      @RequestBody CandidateImage profilePic) {
         byte[] byteArrray = profilePic.getProfilePic().getBytes();
         Candidate candidate = this.profileService.savePhotoProfile(candidateId, byteArrray);
         candidate.setImage(new String(candidate.getProfilePic(), StandardCharsets.UTF_8));
@@ -47,7 +45,6 @@ public class ProfileCandidateController {
     @PreAuthorize("isOwner(#candidateId) and hasRole('ROLE_CANDIDATE')")
     public ResponseEntity<Summary> postSummary(@RequestParam("candidateId") String candidateId,
                                                @RequestBody Summary summary) {
-
         Summary response = this.profileService.insertOrUpdateSummary(candidateId, summary);
         return ResponseEntity.ok(response);
     }
@@ -57,6 +54,7 @@ public class ProfileCandidateController {
         Summary response = this.profileService.getSummary(candidateId);
         return ResponseEntity.ok(response);
     }
+
     // End Of Summary!
 
     // Experience Area!

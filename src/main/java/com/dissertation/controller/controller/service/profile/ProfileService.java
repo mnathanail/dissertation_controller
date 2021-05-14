@@ -116,7 +116,7 @@ public class ProfileService implements IProfile {
                         Endpoint.EXPERIENCE_LIST_GET,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<List<Experience>>() {},
+                        new ParameterizedTypeReference<>() {},
                         urlParams);
         return  a.getBody();
     }
